@@ -8,3 +8,8 @@ export type TGenericErrorResponse = {
   message: string;
   errorSources: TErrorSources;
 };
+
+export type IGenericErrorMessage = {
+  path: string | number;
+  message: string;
+};
