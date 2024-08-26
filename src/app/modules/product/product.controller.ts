@@ -14,10 +14,21 @@ import { IProduct } from './product.interface';
 // import { IStudent } from './student.interface';
 // import { StudentService } from './student.service';
 
+const createProduct = catchAsync(async (req: Request, res: Response) => {
+  const {...productData} = req.body
+  
+
+ const result =await ProductService.createProduct(productData)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Product created successfully',
+    data: result
+  });
+});
 const getAllProduct = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, productFilterableFields);
   const paginationOptions = pick(req.query, paginationFields);
-
   const result = await ProductService.getAllProduct(
     filters,
     paginationOptions
@@ -27,16 +38,13 @@ const getAllProduct = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Product retrieved successfully !',
-    meta: result.meta,
     data: result.data,
   });
 });
 
 const getSingleProduct = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-
   const result = await ProductService.getSingleProduct(id);
-
   sendResponse<IProduct | null>(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -76,4 +84,5 @@ getAllProduct,
 getSingleProduct,
 updateProduct,
 deleteProduct,
+createProduct
 };

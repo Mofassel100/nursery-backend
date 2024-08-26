@@ -9,6 +9,16 @@ import { productSearchableFields } from './product.constant';
 import { Product } from './product.modal';
 import AppError from '../../errors/AppError';
 
+
+// product create 
+const createProduct = async(payload:IProduct)=>{
+  console.log(payload)
+  const create = await Product.create(payload)
+ 
+  return create
+ 
+}
+
 const getAllProduct = async (
   filters: IProductFilters,
   paginationOptions: IPaginationOptions
@@ -120,4 +130,5 @@ getAllProduct,
 getSingleProduct,
 updateProduct,
 deleteProduct,
+createProduct
 };

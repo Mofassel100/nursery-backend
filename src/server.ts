@@ -2,7 +2,10 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import config from "./app/config";
-
+process.on('uncaughtException', error => {
+  console.error(error);
+  process.exit(1);
+});
 let server: Server;
 
 async function main() {
@@ -15,7 +18,18 @@ async function main() {
   } catch (err) {
     console.log(err);
   }
+  process.on('unhandledRejection', error => {
+    if (server) {
+      server.close(() => {
+        console.error(error);
+        process.exit(1);
+      });
+    } else {
+      process.exit(1);
+    }
+  });
 }
+
 
 main();
 
@@ -29,7 +43,9 @@ process.on("unhandledRejection", () => {
   process.exit(1);
 });
 
-process.on("uncaughtException", () => {
-  console.log(`😈 uncaughtException is detected , shutting down ...`);
-  process.exit(1);
+process.on('SIGTERM', () => {
+  console.info('SIGTERM is received');
+  if (server) {
+    server.close();
+  }
 });
